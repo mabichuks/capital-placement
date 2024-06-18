@@ -1,0 +1,10 @@
+services:
+  capital-placement-api:
+    build: 
+      context: .
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      HTTP_PORTS: 3001
+      #ConnectionStrings__CosmosDbConnection: "mongodb://cosmos-db-emulator:10250/?ssl=true&sslVerifyCertificate=false"
+    ports:
+      - "3001:3001"
