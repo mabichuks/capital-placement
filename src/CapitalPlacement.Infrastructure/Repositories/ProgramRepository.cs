@@ -59,7 +59,25 @@ namespace CapitalPlacement.Infrastructure.Repositories
             var existing = await LoadProductWithReferences(program.Id!);
             if (existing == null) return null;
             existing.Title = program.Title;
-            existing.Questions = program.Questions.Select(x => x.ToEntity(program.Id!)).ToList();
+            existing.Questions.ForEach(question =>
+            {
+                var updated = program.Questions.FirstOrDefault(x => x.Id == question.Id);
+                if (updated != null)
+                {
+                    question.MaxLength = updated.MaxLength;
+                    question.Text = updated.Text;
+                    question.Options = updated.Options;
+                    question.AllowMultiSelect = updated.AllowMultiSelect;
+                    question.HasOther = updated.HasOther;
+                    question.IsHidden = updated.IsHidden;
+                    question.IsInternal = updated.IsInternal;
+                    question.IsMandatory = updated.IsMandatory;
+                    question.IsPersonalInformaton = updated.IsPersonalInformaton;
+                    question.Max = updated.Max;
+                    question.Min = updated.Min;
+                }
+            });
+            //existing.Questions = program.Questions.Select(x => x.ToEntity(program.Id!, x.Id)).ToList();
             await _dbContext.SaveChangesAsync();
             return program;
         }

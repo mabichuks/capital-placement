@@ -42,6 +42,7 @@ builder.Services.AddDbContextFactory<CosmosDbContext>(optionsBuilder =>
       }));
 
 builder.Services.AddScoped<IProgramRepository, ProgramRepository>();
+builder.Services.AddScoped<ICandidateApplicationRepository, CandidateApplicationRepository>();
 builder.Services.AddScoped<ProgramService>();
 builder.Services.AddScoped<CandidateApplicationService>();
 

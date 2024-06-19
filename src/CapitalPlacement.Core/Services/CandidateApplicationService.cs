@@ -1,6 +1,7 @@
 ﻿using CapitalPlacement.Core.Exceptions;
 using CapitalPlacement.Core.Interface.Repositories;
 using CapitalPlacement.Core.Models;
+using System.ComponentModel.DataAnnotations;
 
 
 namespace CapitalPlacement.Core.Services
@@ -8,9 +9,11 @@ namespace CapitalPlacement.Core.Services
     public class CandidateApplicationService
     {
         private readonly ICandidateApplicationRepository _repo;
-        public CandidateApplicationService(ICandidateApplicationRepository repo)
+        private readonly IProgramRepository _programRepository;
+        public CandidateApplicationService(ICandidateApplicationRepository repo, IProgramRepository programRepository)
         {
             _repo = repo;
+            _programRepository = programRepository;
         }
         public async Task<CandidateApplication> GetCandidateApplicationByIdAsync(string id)
         {
@@ -21,8 +24,12 @@ namespace CapitalPlacement.Core.Services
 
         public async Task<CandidateApplication> SubmitCandidateApplicationAsync(CandidateApplication candidateApplication)
         {
-            var response = await _repo.Add(candidateApplication);
-            return response;
+            if (string.IsNullOrEmpty(candidateApplication.ProgramId)) throw new ValidationException("Program Id cannot be empty or null");
+            var program = await _programRepository.GetById(candidateApplication.ProgramId);
+            if (program == null) throw new NotFoundException($"Program with Id {candidateApplication.ProgramId} not found");
+            candidateApplication.Id = Guid.NewGuid().ToString();
+            await _repo.Add(candidateApplication);
+            return candidateApplication;
         }
     }
 }

@@ -7,7 +7,7 @@ namespace CapitalPlacement.Infrastructure.Extensions
 {
     public static class Mapper
     {
-        public static QuestionEntity ToEntity(this Question model, string id)
+        public static QuestionEntity ToEntity(this Question model, string programId)
         {
 
             return new QuestionEntity
@@ -25,7 +25,7 @@ namespace CapitalPlacement.Infrastructure.Extensions
                 QuestionType = model.QuestionType.ToString(),
                 Text = model.Text,
                 IsPersonalInformaton = model.IsPersonalInformaton,
-                ProgramEntityId = id
+                ProgramEntityId = programId,
             };
         }
 
@@ -67,7 +67,7 @@ namespace CapitalPlacement.Infrastructure.Extensions
             {
                 Question = model.Question,
                 QuestionId = model.QuestionId,
-                Response = model.Response
+                Response = JsonSerializer.Deserialize<object>(model.Response!)
             };
         }
     }

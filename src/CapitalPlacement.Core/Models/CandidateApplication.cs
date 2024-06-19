@@ -6,6 +6,7 @@ namespace CapitalPlacement.Core.Models
     {
         [JsonIgnore]
         public string? Id { get; set; }
+        public string? ProgramId { get; set; }
         public List<Answer> Answers { get; set; } = new();
     }
 }
